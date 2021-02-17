@@ -18,7 +18,6 @@ class RevengeGamePlayer:
     def to_object(self):
         player = {
             "name": self.name,
-            "current_team": self.current_team,
-            "usage_percentage": self.details.usage_percentage
+            "current_team": self.current_team
         }
         return player

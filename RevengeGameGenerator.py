@@ -1,5 +1,6 @@
-import datetime
+from datetime import datetime
 from urllib.error import HTTPError
+import dateutil.parser
 
 from RevengeGame import RevengeGame
 from RevengeGamePlayer import RevengeGamePlayer
@@ -58,7 +59,7 @@ class RevengeGameGenerator:
         if (schedule):
             for game in schedule:
                 if (not game_found):
-                    date_time_obj = datetime.datetime.strptime(game.date, "%a, %b %d, %Y").strftime("%Y-%m-%d")
+                    date_time_obj = dateutil.parser.parse(game.date).strftime("%Y-%m-%d")
                     if (date_time_obj == now_formatted):
                         game_found = True
                         todays_game = game

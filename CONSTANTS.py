@@ -4,3 +4,4 @@ ROSTER = "roster"
 PLAYER = "player"
 
 NBA = "nba"
+NHL = "nhl"
