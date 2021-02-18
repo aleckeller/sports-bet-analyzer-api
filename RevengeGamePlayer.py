@@ -9,7 +9,6 @@ class RevengeGamePlayer():
         the_string = f"""
         Name: {self.name}
         Current Team: {self.current_team.name}
-        Usage Percentage: {self.player.usage_percentage}
         """
         return the_string
     

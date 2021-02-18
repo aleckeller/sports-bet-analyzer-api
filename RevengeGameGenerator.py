@@ -1,7 +1,6 @@
 from datetime import datetime
 from urllib.error import HTTPError
 import dateutil.parser
-from sportsreference.nba.teams import Team, Teams
 
 from RevengeGame import RevengeGame
 from RevengeGamePlayer import RevengeGamePlayer
@@ -47,24 +46,25 @@ class RevengeGameGenerator:
         return revenge_game
     
     def get_games_today(self):
-        teams = self.get_teams_in_year(self.date_of_games.year)
+        teams = self.get_teams(year=self.date_of_games.year)
         teams_playing_today = []
         games_today = []
         for team in teams:
             if (team.abbreviation not in teams_playing_today):
                 game = self.get_team_todays_game(team.abbreviation)
                 if (game):
-                    sports_reference_teams = Teams()
-                    if game.location == CONSTANTS.HOME:
-                        home_team = RevengeGameTeam(team)
-                        away_team = RevengeGameTeam(sports_reference_teams(game.opponent_abbr))
-                    else:
-                        home_team = RevengeGameTeam(sports_reference_teams(game.opponent_abbr))
-                        away_team = RevengeGameTeam(team)
-                    teams_playing_today.append(home_team.abbreviation)
-                    teams_playing_today.append(away_team.abbreviation)
-                    revengeGame = RevengeGame(home_team, away_team, [])
-                    games_today.append(revengeGame)
+                    sports_reference_team = self.get_teams(team_abbreviation=game.opponent_abbr)
+                    if sports_reference_team:
+                        if game.location == CONSTANTS.HOME:
+                            home_team = RevengeGameTeam(team)
+                            away_team = RevengeGameTeam(sports_reference_team)
+                        else:
+                            home_team = RevengeGameTeam(sports_reference_team)
+                            away_team = RevengeGameTeam(team)
+                        teams_playing_today.append(home_team.abbreviation)
+                        teams_playing_today.append(away_team.abbreviation)
+                        revengeGame = RevengeGame(home_team, away_team, [])
+                        games_today.append(revengeGame)
         return games_today
     
     def get_team_todays_game(self, team_abbreviation):
@@ -110,13 +110,25 @@ class RevengeGameGenerator:
         else:
             return None
 
-    def get_teams_in_year(self, year):
+    def get_teams(self, team_abbreviation=None, year=None):
         teams = sports_objects.get_sport_object(self.sport, CONSTANTS.TEAMS)
         if teams:
             try:
-                return teams(year = year)
+                if team_abbreviation:
+                    team = teams()
+                    return team(team_abbreviation)
+                elif year:
+                    return teams(year = year)
+                else:
+                    print("Need to provide year or team abbreviation!")
+                    return None
             except HTTPError:
-                print(year + " does not have any teams!")
+                if team_abbreviation:
+                    print(team_abbreviation + " does not have a team!")
+                elif year:
+                    print(year + " does not have any teams!")
+                else:
+                    print("Need to provide year or team abbreviation!")
                 return None
         else:
             return None
