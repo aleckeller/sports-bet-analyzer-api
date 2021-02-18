@@ -8,6 +8,11 @@ from sportsreference.nhl.schedule import Schedule as NHLSchedule
 from sportsreference.nhl.roster import Roster as NHLRoster
 from sportsreference.nhl.roster import Player as NHLPlayer
 
+from sportsreference.ncaab.teams import Teams as NCAABTeams
+from sportsreference.ncaab.schedule import Schedule as NCAABSchedule
+from sportsreference.ncaab.roster import Roster as NCAABRoster
+from sportsreference.ncaab.roster import Player as NCAABPlayer
+
 import CONSTANTS
 
 def get_map():
@@ -23,6 +28,12 @@ def get_map():
             CONSTANTS.SCHEDULE : NHLSchedule,
             CONSTANTS.ROSTER : NHLRoster,
             CONSTANTS.PLAYER : NHLPlayer
+        },
+        CONSTANTS.NCAAB : {
+            CONSTANTS.TEAMS : NCAABTeams,
+            CONSTANTS.SCHEDULE : NCAABSchedule,
+            CONSTANTS.ROSTER : NCAABRoster,
+            CONSTANTS.PLAYER : NCAABPlayer
         }
     }
     return sports_map

@@ -5,3 +5,4 @@ PLAYER = "player"
 
 NBA = "nba"
 NHL = "nhl"
+NCAAB = "ncaab"
