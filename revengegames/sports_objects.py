@@ -13,7 +13,7 @@ from sportsreference.ncaab.schedule import Schedule as NCAABSchedule
 from sportsreference.ncaab.roster import Roster as NCAABRoster
 from sportsreference.ncaab.roster import Player as NCAABPlayer
 
-import CONSTANTS
+import revengegames.CONSTANTS as CONSTANTS
 
 def get_map():
     sports_map = {

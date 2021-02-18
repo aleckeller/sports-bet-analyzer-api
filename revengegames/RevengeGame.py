@@ -1,6 +1,6 @@
 from typing import List
-from RevengeGamePlayer import RevengeGamePlayer
-from RevengeGameTeam import RevengeGameTeam
+from revengegames.RevengeGamePlayer import RevengeGamePlayer
+from revengegames.RevengeGameTeam import RevengeGameTeam
 
 class RevengeGame:
     def __init__(self, home_team: RevengeGameTeam, away_team: RevengeGameTeam, revenge_game_players: List[RevengeGamePlayer]):

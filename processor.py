@@ -1,8 +1,7 @@
 from datetime import datetime
-import requests
 
 import utils
-from RevengeGameGenerator import RevengeGameGenerator
+from revengegames.RevengeGameGenerator import RevengeGameGenerator
 
 now = datetime.now()
 

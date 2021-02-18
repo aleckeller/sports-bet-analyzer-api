@@ -2,11 +2,11 @@ from datetime import datetime
 from urllib.error import HTTPError
 import dateutil.parser
 
-from RevengeGame import RevengeGame
-from RevengeGamePlayer import RevengeGamePlayer
-from RevengeGameTeam import RevengeGameTeam
-import sports_objects
-import CONSTANTS
+from revengegames.RevengeGame import RevengeGame
+from revengegames.RevengeGamePlayer import RevengeGamePlayer
+from revengegames.RevengeGameTeam import RevengeGameTeam
+import revengegames.sports_objects as sports_objects
+import revengegames.CONSTANTS as CONSTANTS
 
 class RevengeGameGenerator:
     def __init__(self, sport: str, years_back: int, date_of_games: datetime):

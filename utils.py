@@ -1,6 +1,6 @@
 from typing import List
 
-import sports_objects
+import revengegames.sports_objects as sports_objects
 
 def create_error_response(code: int, message: str):
     return {
