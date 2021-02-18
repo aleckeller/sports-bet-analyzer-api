@@ -1,9 +1,11 @@
 from datetime import datetime
 from urllib.error import HTTPError
 import dateutil.parser
+from sportsreference.nba.teams import Team, Teams
 
 from RevengeGame import RevengeGame
 from RevengeGamePlayer import RevengeGamePlayer
+from RevengeGameTeam import RevengeGameTeam
 import sports_objects
 import CONSTANTS
 
@@ -17,25 +19,31 @@ class RevengeGameGenerator:
         revenge_games = []
         games = self.get_games_today()
         for game in games:
-            revenge_game = self.get_revenge_game(game[0], game[1], is_revenge_game=False, revenge_game_players=[], switched=False)
+            revenge_game = self.get_revenge_game(game, is_revenge_game=False, switched=False)
             if revenge_game:
-                revenge_games.append(revenge_game)
+                revenge_games.append(game)
         return revenge_games
     
-    def get_revenge_game(self, team_one_abbreviation, team_two_abbreviation, is_revenge_game=False, revenge_game_players=[], switched=False):
-        roster = self.get_team_roster(team_one_abbreviation, self.date_of_games.year, True)
-        other_roster = self.get_roster_within_years(team_two_abbreviation, self.years_back)
+    def get_revenge_game(self, game, is_revenge_game=False, switched=False):
+        if not switched:
+            team_one = game.home_team
+            team_two = game.away_team
+        else:
+            team_one = game.away_team
+            team_two = game.home_team
+        team_one_roster = self.get_team_roster(team_one.abbreviation, self.date_of_games.year, True)
+        team_two_roster = self.get_roster_within_years(team_two.abbreviation, self.years_back)
         revenge_game = None
-        for player in roster.players.items():
-            if player in other_roster:
+        for player in team_one_roster.players.items():
+            if player in team_two_roster:
                 is_revenge_game = True
-                revenge_game_player = RevengeGamePlayer(player[0], player[1], team_one_abbreviation, self.get_player(player[0]))
-                revenge_game_players.append(revenge_game_player)
+                revenge_game_player = RevengeGamePlayer(self.get_player(player[0]), team_one)
+                game.revenge_game_players.append(revenge_game_player)
 
         if not switched:
-            revenge_game = self.get_revenge_game(team_two_abbreviation, team_one_abbreviation, is_revenge_game, revenge_game_players, True)
+            revenge_game = self.get_revenge_game(game, is_revenge_game, True)
         elif is_revenge_game:
-            revenge_game = RevengeGame(team_one_abbreviation, team_two_abbreviation, revenge_game_players)
+            revenge_game = game
         return revenge_game
     
     def get_games_today(self):
@@ -46,9 +54,17 @@ class RevengeGameGenerator:
             if (team.abbreviation not in teams_playing_today):
                 game = self.get_team_todays_game(team.abbreviation)
                 if (game):
-                    teams_playing_today.append(team.abbreviation)
-                    teams_playing_today.append(game.opponent_abbr)
-                    games_today.append((team.abbreviation, game.opponent_abbr))
+                    sports_reference_teams = Teams()
+                    if game.location == CONSTANTS.HOME:
+                        home_team = RevengeGameTeam(team)
+                        away_team = RevengeGameTeam(sports_reference_teams(game.opponent_abbr))
+                    else:
+                        home_team = RevengeGameTeam(sports_reference_teams(game.opponent_abbr))
+                        away_team = RevengeGameTeam(team)
+                    teams_playing_today.append(home_team.abbreviation)
+                    teams_playing_today.append(away_team.abbreviation)
+                    revengeGame = RevengeGame(home_team, away_team, [])
+                    games_today.append(revengeGame)
         return games_today
     
     def get_team_todays_game(self, team_abbreviation):

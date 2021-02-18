@@ -1,10 +1,11 @@
 from typing import List
 from RevengeGamePlayer import RevengeGamePlayer
+from RevengeGameTeam import RevengeGameTeam
 
 class RevengeGame:
-    def __init__(self, team_one: str, team_two: str, revenge_game_players: List[RevengeGamePlayer]):
-        self.team_one = team_one
-        self.team_two = team_two
+    def __init__(self, home_team: RevengeGameTeam, away_team: RevengeGameTeam, revenge_game_players: List[RevengeGamePlayer]):
+        self.home_team = home_team
+        self.away_team = away_team
         self.revenge_game_players = revenge_game_players
     
     def to_string(self):
@@ -13,7 +14,7 @@ class RevengeGame:
             revenge_game_players_string = revenge_game_players_string + revenge_game_player.to_string()
         the_string = f"""
         Game: 
-        {self.team_one} vs. {self.team_two}
+        {self.away_team.name} vs. {self.home_team.name}
 
         Revenge Players: [
         {revenge_game_players_string}
@@ -27,8 +28,8 @@ class RevengeGame:
             json_revenge_players.append(revenge_game_player.to_object())
 
         game = {
-            "team_one": self.team_one,
-            "team_two": self.team_two,
+            "home_team_name": self.home_team.name,
+            "away_team_name": self.away_team.name,
             "revenge_players": json_revenge_players
         }
         return game
