@@ -1,6 +1,7 @@
 from datetime import datetime
 from urllib.error import HTTPError
 import dateutil.parser
+from sportsreference.nba.teams import Team, Teams
 
 from revengegames.RevengeGame import RevengeGame
 from revengegames.RevengeGamePlayer import RevengeGamePlayer
