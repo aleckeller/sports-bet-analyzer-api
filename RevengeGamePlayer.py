@@ -1,5 +1,3 @@
-import json
-
 class RevengeGamePlayer:
     def __init__(self, id: str, name: str, current_team: str, details):
         self.id = id

@@ -1,6 +1,5 @@
 from typing import List
 from RevengeGamePlayer import RevengeGamePlayer
-import json
 
 class RevengeGame:
     def __init__(self, team_one: str, team_two: str, revenge_game_players: List[RevengeGamePlayer]):

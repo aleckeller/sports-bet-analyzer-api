@@ -1,6 +1,5 @@
 from typing import List
 
-
 import sports_objects
 
 def create_error_response(code: int, message: str):
