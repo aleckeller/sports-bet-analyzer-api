@@ -70,14 +70,14 @@ class RevengeGameGenerator:
         return games_today
     
     def get_team_todays_game(self, team_abbreviation):
-        now_formatted = self.date_of_games.strftime("%Y-%m-%d")
+        now_formatted = self.date_of_games.strftime("%m-%d-%Y")
         todays_game = None
         game_found = False
         schedule = self.get_team_schedule(team_abbreviation)
         if (schedule):
             for game in schedule:
                 if (not game_found):
-                    date_time_obj = dateutil.parser.parse(game.date).strftime("%Y-%m-%d")
+                    date_time_obj = dateutil.parser.parse(game.date).strftime("%m-%d-%Y")
                     if (date_time_obj == now_formatted):
                         game_found = True
                         todays_game = game

@@ -1,4 +1,5 @@
 from typing import List
+from datetime import datetime
 
 import revengegames.sports_objects as sports_objects
 
@@ -15,3 +16,14 @@ def validate_array(obj):
 
 def validate_league(league: str):
     return league in sports_objects.get_map().keys()
+
+def validate_date(date):
+    valid_date = False
+    if isinstance(date, str):
+        try:
+            datetime.strptime(date, '%m-%d-%Y')
+            valid_date = True
+        except ValueError:
+            print("Not a valid date..")
+        
+    return valid_date
