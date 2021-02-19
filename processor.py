@@ -2,8 +2,7 @@ from datetime import datetime
 
 import utils
 from revengegames.RevengeGameGenerator import RevengeGameGenerator
-
-now = datetime.now()
+from revengegames import CONSTANTS
 
 def get_revenge_games_today(json_body):
     response = {}
@@ -16,7 +15,10 @@ def get_revenge_games_today(json_body):
                 response["data"] = {}
                 for league in leagues:
                     if (utils.validate_league(league)):
-                        revengeGameGenerator = RevengeGameGenerator(league, 2, date_object)
+                        number_of_years_back = json_body.get("number_of_years_back")
+                        if not number_of_years_back:
+                            number_of_years_back = CONSTANTS.DEFAULT_NUMBER_OF_YEARS_BACK
+                        revengeGameGenerator = RevengeGameGenerator(league, number_of_years_back, date_object)
                         revenge_games = revengeGameGenerator.get_revenge_games()
                         response_array = []
                         for revenge_game in revenge_games:
