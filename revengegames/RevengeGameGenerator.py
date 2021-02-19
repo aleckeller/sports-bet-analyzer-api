@@ -34,9 +34,11 @@ class RevengeGameGenerator:
         team_two_roster = self.get_roster_within_years(team_two.abbreviation, self.years_back)
         revenge_game = None
         for player in team_one_roster.players.items():
-            if player in team_two_roster:
+            player_id = player[0]
+            if team_two_roster.get(player_id):
                 is_revenge_game = True
-                revenge_game_player = RevengeGamePlayer(self.get_player(player[0]), team_one)
+                player_previous_team_years = team_two_roster[player_id].get("years")
+                revenge_game_player = RevengeGamePlayer(self.get_player(player_id), team_one, player_previous_team_years)
                 game.revenge_game_players.append(revenge_game_player)
 
         if not switched:
@@ -82,13 +84,24 @@ class RevengeGameGenerator:
         return todays_game
 
     def get_roster_within_years(self, team_abbreviation, years_back):
-        timeline_roster = []
+        timeline_roster = {}
         for num_of_years in range(0, years_back + 1):
             year_to_check = self.date_of_games.year - num_of_years
             roster = self.get_team_roster(team_abbreviation, year_to_check, True)
             for player in roster.players.items():
-                if player not in timeline_roster:
-                    timeline_roster.append(player)
+                player_id = player[0]
+                player_name = player[1]
+                if player_id in timeline_roster.keys():
+                    # Get player from timeline_roster and add year to array
+                    years = timeline_roster[player_id]["years"]
+                    years.append(year_to_check)
+                    timeline_roster[player_id]["years"] = years
+                else:
+                    # Add player to timeline_roster and init year array
+                    timeline_roster[player_id] = {
+                        "name": player_name,
+                        "years": [year_to_check]
+                    }
         return timeline_roster
 
     def has_player_been_on_team_in_year(self, player_to_be_searched_name, roster, year):
