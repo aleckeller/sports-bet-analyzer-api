@@ -9,12 +9,12 @@ class RevengeGameNHLPlayer(RevengeGamePlayer):
         string = super().to_string()
         string = string + f"""
         Corsi for Percentage: {self.player.corsi_for_percentage}
-        Goals: {self.player.goals}
+        Plus_Minus: {self.player.plus_minus}
         """
         return string
     
     def to_object(self):
         data = super().to_object()
         data["corsi_for_percentage"] = self.player.corsi_for_percentage
-        data["goals"] = self.player.goals
+        data["plus_minus"] = self.player.plus_minus
         return data
