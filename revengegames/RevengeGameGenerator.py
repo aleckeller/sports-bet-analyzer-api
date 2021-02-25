@@ -38,7 +38,8 @@ class RevengeGameGenerator:
             if team_two_roster.get(player_id):
                 is_revenge_game = True
                 player_previous_team_years = team_two_roster[player_id].get("years")
-                revenge_game_player = RevengeGamePlayer(self.get_player(player_id), team_one, player_previous_team_years)
+                revenge_game_player = sports_objects.get_sport_object(self.sport, CONSTANTS.REVENGE_GAME_PLAYER)
+                revenge_game_player = revenge_game_player(self.get_player(player_id), team_one, player_previous_team_years)
                 game.revenge_game_players.append(revenge_game_player)
 
         if not switched:
@@ -167,3 +168,7 @@ class RevengeGameGenerator:
                 return None
         else:
             return None
+    
+    def get_revenge_game_player(self):
+        revenge_game_player = sports_objects.get_sport_object(self.sport, CONSTANTS.REVENGE_GAME_PLAYER)
+        return revenge_game_player
