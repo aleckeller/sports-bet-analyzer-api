@@ -11,8 +11,10 @@ RULES_KEY = "rules"
 RULE_KEY = "rule"
 POINTS_KEY = "points"
 GAME_KEY = "game"
+TEAM_KEY = "team"
 JSON_LOGIC_OBJECT_KEYS = [PLAYER_KEY, GAME_KEY]
 JSON_LOGIC_KEY = "json_logic"
+METRICS_KEY = "metrics"
 
 NBA = "nba"
 NHL = "nhl"

@@ -1,20 +1,19 @@
+import utils
+
 class RevengeGameTeam():
 
-    def __init__(self, team):
+    def __init__(self, team, metrics):
         self.name = team.name
         self.abbreviation = team.abbreviation
         self.team = team
-
-    def to_string(self):
-        the_string = f"""
-        Name: {self.name}
-        Abbreviation: {self.abbreviation}
-        """
-        return the_string
+        self.metrics = metrics
+        self.data_dictionary = self.to_dictionary()
     
-    def to_object(self):
-        team = {
+    def to_dictionary(self):
+        team_dict = {
             "name": self.name,
             "abbreviation": self.abbreviation
         }
-        return team
+        metrics_dict = utils.create_metrics_object(self.metrics, self.team)
+        team_dict.update(metrics_dict)
+        return team_dict

@@ -27,3 +27,21 @@ def validate_date(date):
             print("Not a valid date..")
         
     return valid_date
+
+def create_metrics_object(metrics, object):
+    new_object = {}
+    if metrics:
+        for metric in metrics:
+            value = getattr(object, metric, None)
+            if value:
+                new_object[metric] = value
+    return new_object
+
+def create_metrics_string(metrics, object):
+    string = ""
+    if metrics:
+        for metric in metrics:
+            value = getattr(object, metric, None)
+            if value:
+                string = string + metric + ": " + value + "\n"
+    return string

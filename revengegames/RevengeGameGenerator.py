@@ -40,8 +40,8 @@ class RevengeGameGenerator:
             if team_two_roster.get(player_id):
                 is_revenge_game = True
                 player_previous_team_years = team_two_roster[player_id].get("years")
-                revenge_game_player = sports_objects.get_sport_object(self.sport, CONSTANTS.REVENGE_GAME_PLAYER)
-                revenge_game_player = revenge_game_player(self.get_player(player_id), team_one, player_previous_team_years)
+                player_metrics = self.get_metrics(CONSTANTS.PLAYER_KEY)
+                revenge_game_player = RevengeGamePlayer(self.get_player(player_id), team_one, player_previous_team_years, player_metrics)
                 game.revenge_game_players.append(revenge_game_player)
 
         if not switched:
@@ -60,15 +60,17 @@ class RevengeGameGenerator:
                 if (game):
                     sports_reference_team = self.get_teams(team_abbreviation=game.opponent_abbr)
                     if sports_reference_team:
+                        team_metrics = self.get_metrics(CONSTANTS.TEAM_KEY)
                         if game.location == CONSTANTS.HOME:
-                            home_team = RevengeGameTeam(team)
-                            away_team = RevengeGameTeam(sports_reference_team)
+                            home_team = RevengeGameTeam(team, team_metrics)
+                            away_team = RevengeGameTeam(sports_reference_team, team_metrics)
                         else:
-                            home_team = RevengeGameTeam(sports_reference_team)
-                            away_team = RevengeGameTeam(team)
+                            home_team = RevengeGameTeam(sports_reference_team, team_metrics)
+                            away_team = RevengeGameTeam(team, team_metrics)
                         teams_playing_today.append(home_team.abbreviation)
                         teams_playing_today.append(away_team.abbreviation)
-                        revengeGame = RevengeGame(home_team, away_team, [])
+                        game_metrics = self.get_metrics(CONSTANTS.GAME_KEY)
+                        revengeGame = RevengeGame(home_team, away_team, [], game_metrics)
                         games_today.append(revengeGame)
         return games_today
     
@@ -174,3 +176,11 @@ class RevengeGameGenerator:
     def get_revenge_game_player(self):
         revenge_game_player = sports_objects.get_sport_object(self.sport, CONSTANTS.REVENGE_GAME_PLAYER)
         return revenge_game_player
+    
+    def get_metrics(self, type):
+        metrics = None
+        for logic in self.json_logic:
+            object = logic.get(type)
+            if object:
+                metrics = object.get(CONSTANTS.METRICS_KEY)
+        return metrics

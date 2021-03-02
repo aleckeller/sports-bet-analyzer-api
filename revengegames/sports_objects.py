@@ -2,13 +2,11 @@ from sportsreference.nba.teams import Teams as NBATeams
 from sportsreference.nba.schedule import Schedule as NBASchedule
 from sportsreference.nba.roster import Roster as NBARoster
 from sportsreference.nba.roster import Player as NBAPlayer
-from revengegames.RevengeGameNBAPlayer import RevengeGameNBAPlayer
 
 from sportsreference.nhl.teams import Teams as NHLTeams
 from sportsreference.nhl.schedule import Schedule as NHLSchedule
 from sportsreference.nhl.roster import Roster as NHLRoster
 from sportsreference.nhl.roster import Player as NHLPlayer
-from revengegames.RevengeGameNHLPlayer import RevengeGameNHLPlayer
 
 from sportsreference.ncaab.teams import Teams as NCAABTeams
 from sportsreference.ncaab.schedule import Schedule as NCAABSchedule
@@ -23,15 +21,13 @@ def get_map():
             CONSTANTS.TEAMS : NBATeams,
             CONSTANTS.SCHEDULE : NBASchedule,
             CONSTANTS.ROSTER : NBARoster,
-            CONSTANTS.PLAYER : NBAPlayer,
-            CONSTANTS.REVENGE_GAME_PLAYER: RevengeGameNBAPlayer
+            CONSTANTS.PLAYER : NBAPlayer
         },
         CONSTANTS.NHL : {
             CONSTANTS.TEAMS : NHLTeams,
             CONSTANTS.SCHEDULE : NHLSchedule,
             CONSTANTS.ROSTER : NHLRoster,
-            CONSTANTS.PLAYER : NHLPlayer,
-            CONSTANTS.REVENGE_GAME_PLAYER: RevengeGameNHLPlayer
+            CONSTANTS.PLAYER : NHLPlayer
         },
         CONSTANTS.NCAAB : {
             CONSTANTS.TEAMS : NCAABTeams,

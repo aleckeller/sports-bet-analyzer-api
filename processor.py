@@ -23,7 +23,7 @@ def get_revenge_games_today(json_body):
                         revenge_games = revengeGameGenerator.get_revenge_games()
                         response_array = []
                         for revenge_game in revenge_games:
-                            response_array.append(revenge_game.to_object())
+                            response_array.append(revenge_game.to_dictionary())
                         response["data"][league] = response_array
                     else:
                         message = str(league) + " is not a valid league (ex: nhl)"
