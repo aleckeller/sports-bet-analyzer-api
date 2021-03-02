@@ -7,16 +7,16 @@ from revengegames import CONSTANTS
 def get_revenge_games_today(json_body):
     response = {}
     if json_body:
-        leagues = json_body.get("leagues")
+        leagues = json_body.get(CONSTANTS.LEAGUES_KEY)
         if leagues:
-            date = json_body.get("date")
+            date = json_body.get(CONSTANTS.DATE_KEY)
             if date and utils.validate_date(date):
-                date_object = datetime.strptime(date, '%m-%d-%Y')
-                response["data"] = {}
+                date_object = datetime.strptime(date, CONSTANTS.DATE_FORMAT)
+                response[CONSTANTS.DATA_KEY] = {}
                 for league in leagues:
                     if (utils.validate_league(league)):
                         json_logic = get_json_logic(league, leagues)
-                        number_of_years_back = json_body.get("number_of_years_back")
+                        number_of_years_back = json_body.get(CONSTANTS.YEARS_BACK_KEY)
                         if not number_of_years_back:
                             number_of_years_back = CONSTANTS.DEFAULT_NUMBER_OF_YEARS_BACK
                         revengeGameGenerator = RevengeGameGenerator(league, number_of_years_back, date_object, json_logic)
@@ -24,7 +24,7 @@ def get_revenge_games_today(json_body):
                         response_array = []
                         for revenge_game in revenge_games:
                             response_array.append(revenge_game.to_dictionary())
-                        response["data"][league] = response_array
+                        response[CONSTANTS.DATA_KEY][league] = response_array
                     else:
                         message = str(league) + " is not a valid league (ex: nhl)"
                         response = utils.create_error_response(500, message)

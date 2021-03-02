@@ -15,6 +15,11 @@ TEAM_KEY = "team"
 JSON_LOGIC_OBJECT_KEYS = [PLAYER_KEY, GAME_KEY]
 JSON_LOGIC_KEY = "json_logic"
 METRICS_KEY = "metrics"
+LEAGUES_KEY = "leagues"
+DATE_KEY = "date"
+DATE_FORMAT = "%m-%d-%Y"
+YEARS_BACK_KEY = "number_of_years_back"
+DATA_KEY = "data"
 
 NBA = "nba"
 NHL = "nhl"
