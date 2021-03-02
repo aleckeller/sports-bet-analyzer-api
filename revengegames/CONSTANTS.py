@@ -6,6 +6,13 @@ REVENGE_GAME_PLAYER = "revenge_game_player"
 HOME = "Home"
 AWAY = "Away"
 DEFAULT_NUMBER_OF_YEARS_BACK = 2
+PLAYER_KEY = "player"
+RULES_KEY = "rules"
+RULE_KEY = "rule"
+POINTS_KEY = "points"
+GAME_KEY = "game"
+JSON_LOGIC_OBJECT_KEYS = [PLAYER_KEY, GAME_KEY]
+JSON_LOGIC_KEY = "json_logic"
 
 NBA = "nba"
 NHL = "nhl"

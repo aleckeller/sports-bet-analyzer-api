@@ -9,10 +9,11 @@ import revengegames.sports_objects as sports_objects
 import revengegames.CONSTANTS as CONSTANTS
 
 class RevengeGameGenerator:
-    def __init__(self, sport: str, years_back: int, date_of_games: datetime):
+    def __init__(self, sport: str, years_back: int, date_of_games: datetime, json_logic: object):
         self.sport = sport
         self.years_back = years_back
         self.date_of_games = date_of_games
+        self.json_logic = json_logic
     
     def get_revenge_games(self):
         revenge_games = []
@@ -20,7 +21,8 @@ class RevengeGameGenerator:
         for game in games:
             revenge_game = self.get_revenge_game(game, is_revenge_game=False, switched=False)
             if revenge_game:
-                revenge_games.append(game)
+                revenge_game.determine_revenge_score(self.json_logic)
+                revenge_games.append(revenge_game)
         return revenge_games
     
     def get_revenge_game(self, game, is_revenge_game=False, switched=False):
