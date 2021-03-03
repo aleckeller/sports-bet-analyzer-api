@@ -6,7 +6,7 @@ from worker import conn
 import processor
 
 app = Flask(__name__)
-q = Queue(connection=conn)
+q = Queue(connection=conn, default_timeout=3600)
 
 @app.route('/')
 def index():

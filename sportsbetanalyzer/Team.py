@@ -17,16 +17,17 @@ class Team():
         self.data_dictionary = self.to_dictionary()
     
     def to_dictionary(self, include_score=True):
-        json_players = []
-        for player in self.roster:
-            json_players.append(player.to_dictionary())
-
         team_dict = {
             "name": self.name,
-            "abbreviation": self.abbreviation,
-            "roster": json_players
+            "abbreviation": self.abbreviation
         }
 
+        if isinstance(self.roster, List):
+            json_players = []
+            for player in self.roster:
+                json_players.append(player.to_dictionary())
+            team_dict[CONSTANTS.ROSTER] = json_players
+            
         metrics_dict = utils.create_metrics_object(self.metrics, self.team)
         team_dict.update(metrics_dict)
         if include_score:
