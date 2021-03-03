@@ -20,6 +20,7 @@ DATE_KEY = "date"
 DATE_FORMAT = "%m-%d-%Y"
 YEARS_BACK_KEY = "number_of_years_back"
 DATA_KEY = "data"
+ERROR_KEY = "error"
 
 NBA = "nba"
 NHL = "nhl"

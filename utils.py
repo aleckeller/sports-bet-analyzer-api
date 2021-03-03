@@ -1,7 +1,10 @@
 from typing import List
 from datetime import datetime
 
-import revengegames.sports_objects as sports_objects
+from json_logic import jsonLogic
+from sportsbetanalyzer import CONSTANTS
+
+import sportsbetanalyzer.sports_objects as sports_objects
 
 def create_error_response(code: int, message: str):
     return {
@@ -45,3 +48,13 @@ def create_metrics_string(metrics, object):
             if value:
                 string = string + metric + ": " + value + "\n"
     return string
+
+def determine_score(rules, data):
+    score = 0
+    if rules and isinstance(rules, List):
+        for rule_obj in rules:
+            rule = rule_obj.get(CONSTANTS.RULE_KEY)
+            points = rule_obj.get(CONSTANTS.POINTS_KEY)
+            if jsonLogic(rule, data):
+                score = score + points
+    return score

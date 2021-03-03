@@ -26,10 +26,19 @@ def get_results(job_id):
         response = result
     return response, status_code
 
-@app.route("/revenge-games-today/", methods=["POST"])
-def revenge_games_today_handler():
+@app.route("/games/", methods=["POST"])
+def games_handler():
     json_body = request.get_json()
-    job = q.enqueue(processor.get_revenge_games_today, json_body)
+    job = q.enqueue(processor.process_games, json_body, False)
+    response = {
+        "id": job.get_id()
+    }
+    return response
+
+@app.route("/revenge-games/", methods=["POST"])
+def revenge_games_handler():
+    json_body = request.get_json()
+    job = q.enqueue(processor.process_games, json_body, True)
     response = {
         "id": job.get_id()
     }
