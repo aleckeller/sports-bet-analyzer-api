@@ -6,11 +6,12 @@ from sportsbetanalyzer import CONSTANTS
 import utils
 
 class Game:
-    def __init__(self, home_team: Team, away_team: Team, metrics: List[str], rules: List[object]):
+    def __init__(self, home_team: Team, away_team: Team, metrics: List[str], rules: List[object], odds: object):
         self.home_team = home_team
         self.away_team = away_team
         self.metrics = metrics
         self.rules = rules
+        self.odds = odds
         self.score = utils.determine_score(rules, self.to_dictionary(False))
         self.data_dictionary = self.to_dictionary()
     
@@ -23,4 +24,5 @@ class Game:
         game_dict.update(metrics_dict)
         if include_score:
             game_dict["score"] = self.score
+        game_dict["odds"] = self.odds
         return game_dict

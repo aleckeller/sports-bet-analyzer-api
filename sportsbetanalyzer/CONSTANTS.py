@@ -21,6 +21,17 @@ DATE_FORMAT = "%m-%d-%Y"
 YEARS_BACK_KEY = "number_of_years_back"
 DATA_KEY = "data"
 ERROR_KEY = "error"
+ODDS_API_SPORTS_KEY = "sport_key"
+ODDS_API_URL = "https://api.the-odds-api.com/v3/odds"
+ODDS_MARKETS = [
+    "h2h",
+    "spreads",
+    "totals"
+]
+ODDS_SITES = [
+    "fanduel",
+    "draftkings"
+]
 
 NBA = "nba"
 NHL = "nhl"

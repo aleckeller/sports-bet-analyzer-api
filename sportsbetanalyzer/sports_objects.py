@@ -21,19 +21,22 @@ def get_map():
             CONSTANTS.TEAMS : NBATeams,
             CONSTANTS.SCHEDULE : NBASchedule,
             CONSTANTS.ROSTER : NBARoster,
-            CONSTANTS.PLAYER : NBAPlayer
+            CONSTANTS.PLAYER : NBAPlayer,
+            CONSTANTS.ODDS_API_SPORTS_KEY : "basketball_nba"
         },
         CONSTANTS.NHL : {
             CONSTANTS.TEAMS : NHLTeams,
             CONSTANTS.SCHEDULE : NHLSchedule,
             CONSTANTS.ROSTER : NHLRoster,
-            CONSTANTS.PLAYER : NHLPlayer
+            CONSTANTS.PLAYER : NHLPlayer,
+            CONSTANTS.ODDS_API_SPORTS_KEY : "icehockey_nhl"
         },
         CONSTANTS.NCAAB : {
             CONSTANTS.TEAMS : NCAABTeams,
             CONSTANTS.SCHEDULE : NCAABSchedule,
             CONSTANTS.ROSTER : NCAABRoster,
-            CONSTANTS.PLAYER : NCAABPlayer
+            CONSTANTS.PLAYER : NCAABPlayer,
+            CONSTANTS.ODDS_API_SPORTS_KEY : "basketball_ncaab"
         }
     }
     return sports_map

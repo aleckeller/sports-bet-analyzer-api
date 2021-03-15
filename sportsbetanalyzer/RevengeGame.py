@@ -7,8 +7,8 @@ import utils
 from sportsbetanalyzer.Game import Game
 
 class RevengeGame(Game):
-    def __init__(self, home_team: Team, away_team: Team, metrics: List[str], rules: List[object], revenge_game_players: List[Player]):
-        super().__init__(home_team, away_team, metrics, rules)
+    def __init__(self, home_team: Team, away_team: Team, metrics: List[str], rules: List[object], odds: object, revenge_game_players: List[Player]):
+        super().__init__(home_team, away_team, metrics, rules, odds)
         self.revenge_game_players = revenge_game_players
     
     def to_dictionary(self, include_score=True):

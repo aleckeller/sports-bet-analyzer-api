@@ -1,12 +1,14 @@
 from datetime import datetime
 from urllib.error import HTTPError
 import dateutil.parser
+import os
 
 from sportsbetanalyzer.Game import Game
 from sportsbetanalyzer.Player import Player
 from sportsbetanalyzer.Team import Team
 import sportsbetanalyzer.sports_objects as sports_objects
 import sportsbetanalyzer.CONSTANTS as CONSTANTS
+from sportsbetanalyzer.OddsAPI import OddsAPI
 
 class GameGenerator:
     def __init__(self, league: str, date_of_games: datetime, json_logic: object):
@@ -15,6 +17,8 @@ class GameGenerator:
         self.json_logic = json_logic
     
     def get_games(self, slim_roster=False):
+        odds_api_client = OddsAPI(self.league, os.environ.get("ODDS_API_KEY"))
+        games_with_odds = odds_api_client.get_games_with_odds()
         teams = self.get_teams(year=self.date_of_games.year)
         teams_playing_today = []
         games_today = []
@@ -42,7 +46,8 @@ class GameGenerator:
                         teams_playing_today.append(home_team.abbreviation)
                         teams_playing_today.append(away_team.abbreviation)
                         game_metrics, game_rules = self.get_rules_and_metrics(CONSTANTS.GAME_KEY)
-                        games_today.append(Game(home_team, away_team, game_metrics, game_rules))
+                        game_odds = games_with_odds.get(home_team.name.lower())
+                        games_today.append(Game(home_team, away_team, game_metrics, game_rules, game_odds))
         return games_today
     
     def get_game_for_team(self, team_abbreviation):
