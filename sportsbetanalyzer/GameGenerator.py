@@ -9,6 +9,7 @@ from sportsbetanalyzer.Team import Team
 import sportsbetanalyzer.sports_objects as sports_objects
 import sportsbetanalyzer.CONSTANTS as CONSTANTS
 from sportsbetanalyzer.OddsAPI import OddsAPI
+import utils
 
 class GameGenerator:
     def __init__(self, league: str, date_of_games: datetime, json_logic: object):
@@ -16,7 +17,7 @@ class GameGenerator:
         self.date_of_games = date_of_games
         self.json_logic = json_logic
     
-    def get_games(self, slim_roster=False):
+    def get_games(self, slim_roster=False, include_roster=False):
         odds_api_client = OddsAPI(self.league, os.environ.get("ODDS_API_KEY"))
         games_with_odds = odds_api_client.get_games_with_odds()
         teams = self.get_teams(year=self.date_of_games.year)
@@ -29,13 +30,17 @@ class GameGenerator:
                     print("Working on " + team.abbreviation + " vs. " + game.opponent_abbr)
                     sports_reference_team = self.get_teams(team_abbreviation=game.opponent_abbr)
                     if sports_reference_team:
-                        player_metrics, player_rules = self.get_rules_and_metrics(CONSTANTS.PLAYER_KEY)
-                        if slim_roster:
-                            team_roster = self.get_sports_reference_roster(team.abbreviation, self.date_of_games.year, True)
-                            sports_reference_roster = self.get_sports_reference_roster(sports_reference_team.abbreviation, self.date_of_games.year, True)
+                        if include_roster:
+                            player_metrics, player_rules = self.get_rules_and_metrics(CONSTANTS.PLAYER_KEY)
+                            if slim_roster:
+                                team_roster = self.get_sports_reference_roster(team.abbreviation, self.date_of_games.year, True)
+                                sports_reference_roster = self.get_sports_reference_roster(sports_reference_team.abbreviation, self.date_of_games.year, True)
+                            else:
+                                team_roster = self.get_team_roster(team.abbreviation, self.date_of_games.year, player_metrics, player_rules)
+                                sports_reference_roster = self.get_team_roster(sports_reference_team.abbreviation, self.date_of_games.year, player_metrics, player_rules)
                         else:
-                            team_roster = self.get_team_roster(team.abbreviation, self.date_of_games.year, player_metrics, player_rules)
-                            sports_reference_roster = self.get_team_roster(sports_reference_team.abbreviation, self.date_of_games.year, player_metrics, player_rules)
+                            team_roster = []
+                            sports_reference_roster = []
                         team_metrics, team_rules = self.get_rules_and_metrics(CONSTANTS.TEAM_KEY)
                         if game.location == CONSTANTS.HOME:
                             home_team = Team(team, team_metrics, team_roster, team_rules)
@@ -46,8 +51,18 @@ class GameGenerator:
                         teams_playing_today.append(home_team.abbreviation)
                         teams_playing_today.append(away_team.abbreviation)
                         game_metrics, game_rules = self.get_rules_and_metrics(CONSTANTS.GAME_KEY)
-                        game_odds = games_with_odds.get(home_team.name.lower())
+                        game_odds = None
+                        for key, value in games_with_odds.items():
+                            home_team_clean_key = utils.clean_key(home_team.name)
+                            away_team_clean_key = utils.clean_key(away_team.name)
+                            clean_key = utils.clean_key(key)
+                            if (home_team_clean_key in clean_key or 
+                                    away_team_clean_key in clean_key or
+                                    utils.shorten_state(home_team_clean_key) in clean_key or
+                                    utils.shorten_state(away_team_clean_key) in clean_key):
+                                game_odds = value
                         games_today.append(Game(home_team, away_team, game_metrics, game_rules, game_odds))
+
         return games_today
     
     def get_game_for_team(self, team_abbreviation):

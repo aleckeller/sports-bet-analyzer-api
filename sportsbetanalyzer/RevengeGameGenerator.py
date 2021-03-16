@@ -11,7 +11,7 @@ class RevengeGameGenerator(GameGenerator):
     
     def get_games(self):
         revenge_games = []
-        games = super().get_games(slim_roster=True)
+        games = super().get_games(slim_roster=True, include_roster=True)
         for game in games:
             revenge_game_object = RevengeGame(game.home_team, game.away_team, game.metrics, game.rules, game.odds, [])
             revenge_game = self.get_revenge_game(revenge_game_object, is_revenge_game=False, switched=False)

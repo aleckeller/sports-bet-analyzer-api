@@ -42,9 +42,10 @@ class OddsAPI:
                                     site_odds = site.get("odds")
                                     if site_odds and site_odds.get(market):
                                         if games_with_odds.get(home_team):
-                                            old_odds_site_key = games_with_odds[home_team]["odds"][site_key]
-                                            old_odds_site_key[market] = site_odds.get(market)
-                                            odds[site_key] = old_odds_site_key
+                                            if games_with_odds[home_team]["odds"].get(site_key):
+                                                old_odds_site_key = games_with_odds[home_team]["odds"][site_key]
+                                                old_odds_site_key[market] = site_odds.get(market)
+                                                odds[site_key] = old_odds_site_key
                                         else:
                                             odds[site_key] = {
                                                 market: site_odds.get(market)

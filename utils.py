@@ -58,3 +58,9 @@ def determine_score(rules, data):
             if jsonLogic(rule, data):
                 score = score + points
     return score
+
+def clean_key(string):
+    return string.lower().replace("-", "").replace(" ", "")
+
+def shorten_state(string):
+    return string.lower().replace("state", "st")
