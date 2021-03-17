@@ -37,6 +37,8 @@ class RevengeGameGenerator(GameGenerator):
                 player_metrics, player_rules = super().get_rules_and_metrics(CONSTANTS.PLAYER_KEY)
                 sports_reference_player = self.get_player(player_id)
                 setattr(sports_reference_player, "previous_team_years", player_previous_team_years)
+                setattr(sports_reference_player, "current_team", team_one.name)
+                setattr(sports_reference_player, "previous_team", team_two.name)
                 revenge_game_player = Player(sports_reference_player, player_metrics, player_rules)
                 game.revenge_game_players.append(revenge_game_player)
 

@@ -18,4 +18,10 @@ class Player():
         player_dict.update(metrics_dict)
         if include_score:
             player_dict["score"] = self.score
+        if getattr(self.player, "previous_team_years", None):
+            player_dict["previous_team_years"] = self.player.previous_team_years
+        if getattr(self.player, "current_team", None):
+            player_dict["current_team"] = self.player.current_team
+        if getattr(self.player, "previous_team", None):
+            player_dict["previous_team"] = self.player.previous_team
         return player_dict
