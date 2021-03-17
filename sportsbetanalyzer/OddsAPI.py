@@ -33,24 +33,31 @@ class OddsAPI:
                     home_team = game.get("home_team")
                     if home_team:
                         home_team = home_team.lower()
+                        for team in game.get("teams"):
+                            if team.lower() != home_team:
+                                away_team = team.lower()
                         odds = {}
                         sites = game.get("sites")
+                        if self.league == CONSTANTS.NCAAB:
+                            game_key = home_team
+                        else:
+                            game_key = home_team + away_team
                         if sites and len(sites) > 0:
                             for site in sites:
                                 site_key = site.get("site_key")
                                 if site_key and site_key in CONSTANTS.ODDS_SITES:
                                     site_odds = site.get("odds")
                                     if site_odds and site_odds.get(market):
-                                        if games_with_odds.get(home_team):
-                                            if games_with_odds[home_team]["odds"].get(site_key):
-                                                old_odds_site_key = games_with_odds[home_team]["odds"][site_key]
+                                        if games_with_odds.get(game_key):
+                                            if games_with_odds[game_key]["odds"].get(site_key):
+                                                old_odds_site_key = games_with_odds[game_key]["odds"][site_key]
                                                 old_odds_site_key[market] = site_odds.get(market)
                                                 odds[site_key] = old_odds_site_key
                                         else:
                                             odds[site_key] = {
                                                 market: site_odds.get(market)
                                             }
-                        games_with_odds[home_team] = {
+                        games_with_odds[game_key] = {
                             CONSTANTS.TEAMS : game.get("teams"),
                             "odds": odds
                         }

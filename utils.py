@@ -60,7 +60,7 @@ def determine_score(rules, data):
     return score
 
 def clean_key(string):
-    return string.lower().replace("-", "").replace(" ", "")
+    return string.lower().replace("-", "").replace(" ", "").replace(".", "")
 
 def shorten_state(string):
     return string.lower().replace("state", "st")

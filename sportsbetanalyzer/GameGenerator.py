@@ -51,16 +51,21 @@ class GameGenerator:
                         teams_playing_today.append(home_team.abbreviation)
                         teams_playing_today.append(away_team.abbreviation)
                         game_metrics, game_rules = self.get_rules_and_metrics(CONSTANTS.GAME_KEY)
-                        game_odds = None
+                        game_odds = {}
+                        home_team_clean_key = utils.clean_key(home_team.name)
+                        away_team_clean_key = utils.clean_key(away_team.name)
                         for key, value in games_with_odds.items():
-                            home_team_clean_key = utils.clean_key(home_team.name)
-                            away_team_clean_key = utils.clean_key(away_team.name)
                             clean_key = utils.clean_key(key)
-                            if (home_team_clean_key in clean_key or 
-                                    away_team_clean_key in clean_key or
-                                    utils.shorten_state(home_team_clean_key) in clean_key or
-                                    utils.shorten_state(away_team_clean_key) in clean_key):
-                                game_odds = value
+                            if self.league != CONSTANTS.NCAAB:
+                                game_key = home_team_clean_key + away_team_clean_key
+                                if game_key in clean_key or utils.shorten_state(game_key) in clean_key:
+                                    game_odds = value
+                            else:
+                                if (home_team_clean_key in clean_key or 
+                                        away_team_clean_key in clean_key or
+                                        utils.shorten_state(home_team_clean_key) in clean_key or
+                                        utils.shorten_state(away_team_clean_key) in clean_key):
+                                        game_odds = value
                         games_today.append(Game(home_team, away_team, game_metrics, game_rules, game_odds))
 
         return games_today
