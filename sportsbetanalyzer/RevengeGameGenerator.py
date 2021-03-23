@@ -1,5 +1,5 @@
 from datetime import datetime
-import pickle
+import pickle5 as pickle
 import os
 
 from sportsbetanalyzer.GameGenerator import GameGenerator
@@ -41,9 +41,10 @@ class RevengeGameGenerator(GameGenerator):
                 if not revenge_player.empty:
                     is_revenge_game = True
                     player.add_previous_team_year(year_to_check)
-                    player.set_current_team_name(team_one.name)
-                    player.set_previous_team_name(team_two.name)
-                    game.revenge_game_players.append(player)
+                    if not player in game.revenge_game_players:
+                        player.set_current_team_name(team_one.name)
+                        player.set_previous_team_name(team_two.name)
+                        game.revenge_game_players.append(player)
 
         if not switched:
             revenge_game = self.get_revenge_game(game, is_revenge_game, True)

@@ -1,6 +1,6 @@
 from datetime import datetime
 import os
-import pickle
+import pickle5 as pickle
 
 from sportsbetanalyzer.Game import Game
 from sportsbetanalyzer.Player import Player
