@@ -32,6 +32,7 @@ ODDS_SITES = [
     "fanduel",
     "draftkings"
 ]
+INCLUDE_ODDS_KEY = "include_odds"
 
 NBA = "nba"
 NHL = "nhl"

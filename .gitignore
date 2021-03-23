@@ -2,3 +2,4 @@ __pycache__
 test.py
 venv
 data_gathering_scripts
+pickle_files

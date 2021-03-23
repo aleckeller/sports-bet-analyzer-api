@@ -1,5 +1,6 @@
 from typing import List
 from datetime import datetime
+from urllib.error import HTTPError
 
 from json_logic import jsonLogic
 from sportsbetanalyzer import CONSTANTS
@@ -64,3 +65,37 @@ def clean_key(string):
 
 def shorten_state(string):
     return string.lower().replace("state", "st")
+
+def get_teams(league, team_abbreviation=None, year=None):
+    teams = sports_objects.get_sport_object(league, CONSTANTS.TEAMS)
+    if teams:
+        try:
+            if team_abbreviation:
+                team = teams()
+                return team(team_abbreviation)
+            elif year:
+                return teams(year = year)
+            else:
+                print("Need to provide year or team abbreviation!")
+                return None
+        except HTTPError:
+            if team_abbreviation:
+                print(team_abbreviation + " does not have a team!")
+            elif year:
+                print(year + " does not have any teams!")
+            else:
+                print("Need to provide year or team abbreviation!")
+            return None
+    else:
+        return None
+
+def get_team_schedule(league, team_abbreviation):
+    schedule = sports_objects.get_sport_object(league, CONSTANTS.SCHEDULE)
+    if schedule:
+        try:
+            return schedule(team_abbreviation)
+        except HTTPError:
+            print(team_abbreviation + " does not have a schedule!")
+            return None
+    else:
+        return None

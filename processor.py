@@ -11,6 +11,7 @@ def process_games(json_body, is_revenge_games):
     if not parsed_json.get(CONSTANTS.ERROR_KEY):
         leagues = parsed_json[CONSTANTS.LEAGUES_KEY]
         date_object = parsed_json[CONSTANTS.DATE_KEY]
+        include_odds = parsed_json.get(CONSTANTS.INCLUDE_ODDS_KEY)
         response[CONSTANTS.DATA_KEY] = {}
         for league in leagues:
             if (utils.validate_league(league)):
@@ -22,7 +23,7 @@ def process_games(json_body, is_revenge_games):
                     generator = RevengeGameGenerator(league, number_of_years_back, date_object, json_logic)
                 else:
                     generator = GameGenerator(league, date_object, json_logic)
-                games = generator.get_games()
+                games = generator.get_games(include_odds)
                 response_array = []
                 for game in games:
                     response_array.append(game.to_dictionary())
@@ -45,6 +46,7 @@ def check_for_json_errors(json_body):
                 response = {
                     CONSTANTS.LEAGUES_KEY: leagues,
                     CONSTANTS.DATE_KEY: date_object,
+                    CONSTANTS.INCLUDE_ODDS_KEY: json_body.get(CONSTANTS.INCLUDE_ODDS_KEY)
                 }
             else:
                 message = "Need to provide valid date in format MM-DD-YYYY (ex: 02-18-2021)"

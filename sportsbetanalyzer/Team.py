@@ -6,10 +6,9 @@ import utils
 
 class Team():
 
-    def __init__(self, team, metrics, roster, rules):
-        self.name = team.name
-        self.abbreviation = team.abbreviation
-        self.team = team
+    def __init__(self, name, abbreviation, metrics, roster, rules):
+        self.name = name
+        self.abbreviation = abbreviation
         self.metrics = metrics
         self.roster = roster
         self.rules = rules
@@ -21,15 +20,16 @@ class Team():
             "name": self.name,
             "abbreviation": self.abbreviation
         }
-
         if isinstance(self.roster, List):
             json_players = []
             for player in self.roster:
                 json_players.append(player.to_dictionary())
             team_dict[CONSTANTS.ROSTER] = json_players
-            
-        metrics_dict = utils.create_metrics_object(self.metrics, self.team)
-        team_dict.update(metrics_dict)
+        
+        # TODO: Implement storing team data in s3 so we can use attributes for team
+        # Scoring for teams will not work until above is implemented
+        #metrics_dict = utils.create_metrics_object(self.metrics, self.team)
+        #team_dict.update(metrics_dict)
         if include_score:
             team_dict["score"] = self.score
         return team_dict
