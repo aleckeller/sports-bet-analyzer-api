@@ -13,10 +13,22 @@ from sportsreference.ncaab.schedule import Schedule as NCAABSchedule
 from sportsreference.ncaab.roster import Roster as NCAABRoster
 from sportsreference.ncaab.roster import Player as NCAABPlayer
 
+from sportsreference.mlb.teams import Teams as MLBTeams
+from sportsreference.mlb.schedule import Schedule as MLBSchedule
+from sportsreference.mlb.roster import Roster as MLBRoster
+from sportsreference.mlb.roster import Player as MLBPlayer
+
 import sportsbetanalyzer.CONSTANTS as CONSTANTS
 
 def get_map():
     sports_map = {
+        CONSTANTS.MLB : {
+            CONSTANTS.TEAMS : MLBTeams,
+            CONSTANTS.SCHEDULE : MLBSchedule,
+            CONSTANTS.ROSTER : MLBRoster,
+            CONSTANTS.PLAYER : MLBPlayer,
+            CONSTANTS.ODDS_API_SPORTS_KEY : "baseball_mlb"
+        },
         CONSTANTS.NBA : {
             CONSTANTS.TEAMS : NBATeams,
             CONSTANTS.SCHEDULE : NBASchedule,

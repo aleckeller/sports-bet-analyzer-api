@@ -19,7 +19,10 @@ def upload_rosters_to_s3():
         if league != CONSTANTS.NCAAB:
             for num_of_years in range(0, years_back + 1):
                 year_to_check = now.year - num_of_years
-                index_year = str(year_to_check - 1) + "-" + str(year_to_check)[-2:]
+                if league != CONSTANTS.MLB:
+                    index_year = str(year_to_check - 1) + "-" + str(year_to_check)[-2:]
+                else:
+                    index_year = str(year_to_check)
                 teams = utils.get_teams(league, None, year_to_check)
                 for team in teams:
                     file_name = os.environ.get("TEMP_PICKLE_PATH") + "%s.pkl" % team.abbreviation.lower()
@@ -35,6 +38,8 @@ def upload_rosters_to_s3():
                                         player_dataframe = player.dataframe.loc[index_year]
                                         player_dataframe["name"] = player.name
                                         player_dataframes.append(player_dataframe)
+                                    else:
+                                        print(index_year + " not in index")
                             except:
                                 print("Sportsreference error..")
                         if len(player_dataframes) > 0:
