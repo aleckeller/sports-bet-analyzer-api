@@ -28,7 +28,11 @@ def upload_file(file_name, bucket, object_name=None):
     return True
 
 def read_s3_object(bucket_name, object):
-    return s3_resource.Bucket(bucket_name).Object(object).get()['Body'].read()
+    try:
+        return s3_resource.Bucket(bucket_name).Object(object).get()['Body'].read()
+    except:
+        print(object + " does not exist in " + bucket_name)
+        return None
 
 def list_s3_objects(bucket_name, prefix):
     return s3_client.list_objects(

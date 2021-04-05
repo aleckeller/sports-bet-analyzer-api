@@ -35,16 +35,17 @@ class RevengeGameGenerator(GameGenerator):
             year_to_check = self.date_of_games.year - num_of_years
             roster_key = self.league + "/rosters/" + str(year_to_check) + "/" + team_two.abbreviation + ".pkl"
             file_contents = s3_helper.read_s3_object(os.environ.get("AWS_BUCKET_NAME"), roster_key)
-            roster_df = pickle.loads(file_contents)
-            for player in team_one.roster:
-                revenge_player = roster_df.loc[roster_df['player_id'] == player.player_id]
-                if not revenge_player.empty:
-                    is_revenge_game = True
-                    player.add_previous_team_year(year_to_check)
-                    if not player in game.revenge_game_players:
-                        player.set_current_team_name(team_one.name)
-                        player.set_previous_team_name(team_two.name)
-                        game.revenge_game_players.append(player)
+            if file_contents:
+                roster_df = pickle.loads(file_contents)
+                for player in team_one.roster:
+                    revenge_player = roster_df.loc[roster_df['player_id'] == player.player_id]
+                    if not revenge_player.empty:
+                        is_revenge_game = True
+                        player.add_previous_team_year(year_to_check)
+                        if not player in game.revenge_game_players:
+                            player.set_current_team_name(team_one.name)
+                            player.set_previous_team_name(team_two.name)
+                            game.revenge_game_players.append(player)
 
         if not switched:
             revenge_game = self.get_revenge_game(game, is_revenge_game, True)

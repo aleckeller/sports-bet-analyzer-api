@@ -30,32 +30,33 @@ class GameGenerator:
                     opponent_abbreviation = game["opponent_abbr"].values[0].lower()
                     game_location = game["location"].values[0]
                     opponent_team = next((team for team in teams if team.abbreviation == opponent_abbreviation), None)
-                    if game_location == CONSTANTS.HOME:
-                        home_team = team
-                        away_team = opponent_team
-                    else:
-                        home_team = opponent_team
-                        away_team = team
-                    teams_playing_today.append(home_team.abbreviation)
-                    teams_playing_today.append(away_team.abbreviation)
-                    game_metrics, game_rules = self.get_rules_and_metrics(CONSTANTS.GAME_KEY)
-                    game_odds = {}
-                    home_team_clean_key = utils.clean_key(home_team.name)
-                    away_team_clean_key = utils.clean_key(away_team.name)
-                    if include_odds:
-                        for key, value in games_with_odds.items():
-                            clean_key = utils.clean_key(key)
-                            if self.league != CONSTANTS.NCAAB:
-                                game_key = home_team_clean_key + away_team_clean_key
-                                if game_key in clean_key or utils.shorten_state(game_key) in clean_key:
-                                    game_odds = value
-                            else:
-                                if (home_team_clean_key in clean_key or 
-                                        away_team_clean_key in clean_key or
-                                        utils.shorten_state(home_team_clean_key) in clean_key or
-                                        utils.shorten_state(away_team_clean_key) in clean_key):
+                    if opponent_team:
+                        if game_location == CONSTANTS.HOME:
+                            home_team = team
+                            away_team = opponent_team
+                        else:
+                            home_team = opponent_team
+                            away_team = team
+                        teams_playing_today.append(home_team.abbreviation)
+                        teams_playing_today.append(away_team.abbreviation)
+                        game_metrics, game_rules = self.get_rules_and_metrics(CONSTANTS.GAME_KEY)
+                        game_odds = {}
+                        home_team_clean_key = utils.clean_key(home_team.name)
+                        away_team_clean_key = utils.clean_key(away_team.name)
+                        if include_odds:
+                            for key, value in games_with_odds.items():
+                                clean_key = utils.clean_key(key)
+                                if self.league != CONSTANTS.NCAAB:
+                                    game_key = home_team_clean_key + away_team_clean_key
+                                    if game_key in clean_key or utils.shorten_state(game_key) in clean_key:
                                         game_odds = value
-                    games_today.append(Game(home_team, away_team, game_metrics, game_rules, game_odds))
+                                else:
+                                    if (home_team_clean_key in clean_key or 
+                                            away_team_clean_key in clean_key or
+                                            utils.shorten_state(home_team_clean_key) in clean_key or
+                                            utils.shorten_state(away_team_clean_key) in clean_key):
+                                            game_odds = value
+                        games_today.append(Game(home_team, away_team, game_metrics, game_rules, game_odds))
 
         return games_today
     

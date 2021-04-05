@@ -58,7 +58,30 @@ def upload_schedules_to_s3():
             schedule = utils.get_team_schedule(league, team.abbreviation)
             file_name = os.environ.get("TEMP_PICKLE_PATH") + "%s.pkl" % team.abbreviation.lower()
             if schedule and not schedule.dataframe.empty:
-                schedule.dataframe.to_pickle(file_name)
-                s3_object_name = league + "/schedules/" + "%s.pkl" % team.abbreviation.lower()
-                s3_helper.upload_file(file_name, os.environ.get("AWS_BUCKET_NAME"), s3_object_name)
+                # For MLB, sportsreference only includes games played in the dataframe and not upcoming games.
+                # To handle this, we add all games to the dataframe if MLB
+                schedule_dataframe = None
+                if league == CONSTANTS.MLB:
+                    game_dataframes = []
+                    index = 0
+                    for game in schedule:
+                        df = game.dataframe
+                        if df is not None:
+                            game_dataframes.append(df)
+                        else:
+                            fields_to_include = {
+                                "datetime": game.datetime,
+                                "opponent_abbr": game.opponent_abbr,
+                                "location": game.location
+                            }
+                            game_dataframes.append(pd.DataFrame([fields_to_include], index=[index]))
+                            index += 1
+                    if game_dataframes != []:
+                        schedule_dataframe = pd.concat(game_dataframes)
+                else:
+                    schedule_dataframe = schedule.dataframe
+                if not schedule_dataframe.empty:
+                    schedule_dataframe.to_pickle(file_name)
+                    s3_object_name = league + "/schedules/" + "%s.pkl" % team.abbreviation.lower()
+                    s3_helper.upload_file(file_name, os.environ.get("AWS_BUCKET_NAME"), s3_object_name)
                 print("Finished working on " + team.name)
