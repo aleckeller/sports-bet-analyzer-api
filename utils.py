@@ -1,10 +1,12 @@
 from typing import List
 from datetime import datetime
 from urllib.error import HTTPError
+import pickle
+import os
 
 from json_logic import jsonLogic
 from sportsbetanalyzer import CONSTANTS
-
+import s3_helper
 import sportsbetanalyzer.sports_objects as sports_objects
 
 def create_error_response(code: int, message: str):
@@ -99,3 +101,9 @@ def get_team_schedule(league, team_abbreviation):
             return None
     else:
         return None
+
+def get_schedule_from_s3(league, team_abbreviation):
+    schedule_key = league + "/schedules/" + team_abbreviation.lower() + ".pkl"
+    file_contents = s3_helper.read_s3_object(os.environ.get("AWS_BUCKET_NAME"), schedule_key)
+    team_schedule_df = pickle.loads(file_contents)
+    return team_schedule_df

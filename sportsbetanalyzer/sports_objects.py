@@ -27,28 +27,36 @@ def get_map():
             CONSTANTS.SCHEDULE : MLBSchedule,
             CONSTANTS.ROSTER : MLBRoster,
             CONSTANTS.PLAYER : MLBPlayer,
-            CONSTANTS.ODDS_API_SPORTS_KEY : "baseball_mlb"
+            CONSTANTS.ODDS_API_SPORTS_KEY : "baseball_mlb",
+            CONSTANTS.POINTS_SCORED : "runs_scored",
+            CONSTANTS.POINTS_ALLOWED : "runs_allowed"
         },
         CONSTANTS.NBA : {
             CONSTANTS.TEAMS : NBATeams,
             CONSTANTS.SCHEDULE : NBASchedule,
             CONSTANTS.ROSTER : NBARoster,
             CONSTANTS.PLAYER : NBAPlayer,
-            CONSTANTS.ODDS_API_SPORTS_KEY : "basketball_nba"
+            CONSTANTS.ODDS_API_SPORTS_KEY : "basketball_nba",
+            CONSTANTS.POINTS_SCORED : "points_scored",
+            CONSTANTS.POINTS_ALLOWED : "points_allowed"
         },
         CONSTANTS.NHL : {
             CONSTANTS.TEAMS : NHLTeams,
             CONSTANTS.SCHEDULE : NHLSchedule,
             CONSTANTS.ROSTER : NHLRoster,
             CONSTANTS.PLAYER : NHLPlayer,
-            CONSTANTS.ODDS_API_SPORTS_KEY : "icehockey_nhl"
+            CONSTANTS.ODDS_API_SPORTS_KEY : "icehockey_nhl",
+            CONSTANTS.POINTS_SCORED : "goals_scored",
+            CONSTANTS.POINTS_ALLOWED : "goals_allowed"
         },
         CONSTANTS.NCAAB : {
             CONSTANTS.TEAMS : NCAABTeams,
             CONSTANTS.SCHEDULE : NCAABSchedule,
             CONSTANTS.ROSTER : NCAABRoster,
             CONSTANTS.PLAYER : NCAABPlayer,
-            CONSTANTS.ODDS_API_SPORTS_KEY : "basketball_ncaab"
+            CONSTANTS.ODDS_API_SPORTS_KEY : "basketball_ncaab",
+            CONSTANTS.POINTS_SCORED : "points_scored",
+            CONSTANTS.POINTS_ALLOWED : "points_allowed"
         }
     }
     return sports_map

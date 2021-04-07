@@ -26,29 +26,31 @@ def upload_rosters_to_s3():
                 teams = utils.get_teams(league, None, year_to_check)
                 for team in teams:
                     file_name = os.environ.get("TEMP_PICKLE_PATH") + "%s.pkl" % team.abbreviation.lower()
+                    s3_object_name = league + "/rosters/" + str(year_to_check) + "/" + "%s.pkl" % team.abbreviation.lower()
                     player_dataframes = []
                     if team and team.roster and team.roster.players:
-                        for player in team.roster.players:
-                            # This try catch is currently needed due to an issue with the sportsreference api
-                            # getting the following error: AttributeError: 'NoneType' object has no attribute 'replace'
-                            # when getting a player dataframe for nhl
-                            try:
-                                if player and player.dataframe is not None and not player.dataframe.empty:
-                                    if index_year in player.dataframe.index:
-                                        player_dataframe = player.dataframe.loc[index_year]
-                                        player_dataframe["name"] = player.name
-                                        player_dataframes.append(player_dataframe)
-                                    else:
-                                        print(index_year + " not in index")
-                            except:
-                                print("Sportsreference error..")
-                        if len(player_dataframes) > 0:
-                            df = pd.concat(player_dataframes)
-                            df["team_name"] = team.name
-                            df.to_pickle(file_name)
-                            s3_object_name = league + "/rosters/" + str(year_to_check) + "/" + "%s.pkl" % team.abbreviation.lower()
-                            s3_helper.upload_file(file_name, os.environ.get("AWS_BUCKET_NAME"), s3_object_name)
-                            print("Finished working on " + team.name)
+                        s3_object = s3_helper.read_s3_object(os.environ.get("AWS_BUCKET_NAME"), s3_object_name)
+                        if year_to_check == now.year or not s3_object:
+                            for player in team.roster.players:
+                                # This try catch is currently needed due to an issue with the sportsreference api
+                                # getting the following error: AttributeError: 'NoneType' object has no attribute 'replace'
+                                # when getting a player dataframe for nhl
+                                try:
+                                    if player and player.dataframe is not None and not player.dataframe.empty:
+                                        if index_year in player.dataframe.index:
+                                            player_dataframe = player.dataframe.loc[index_year]
+                                            player_dataframe["name"] = player.name
+                                            player_dataframes.append(player_dataframe)
+                                        else:
+                                            print(index_year + " not in index")
+                                except:
+                                    print("Sportsreference error..")
+                            if len(player_dataframes) > 0:
+                                df = pd.concat(player_dataframes)
+                                df["team_name"] = team.name
+                                df.to_pickle(file_name)
+                                s3_helper.upload_file(file_name, os.environ.get("AWS_BUCKET_NAME"), s3_object_name)
+                                print("Finished working on " + team.name)
 
 def upload_schedules_to_s3():
     print("Uploading schedules to s3..")
@@ -72,7 +74,9 @@ def upload_schedules_to_s3():
                             fields_to_include = {
                                 "datetime": game.datetime,
                                 "opponent_abbr": game.opponent_abbr,
-                                "location": game.location
+                                "location": game.location,
+                                "runs_scored": game.runs_scored,
+                                "runs_allowed": game.runs_allowed
                             }
                             game_dataframes.append(pd.DataFrame([fields_to_include], index=[index]))
                             index += 1

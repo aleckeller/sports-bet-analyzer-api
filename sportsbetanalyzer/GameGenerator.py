@@ -56,15 +56,13 @@ class GameGenerator:
                                             utils.shorten_state(home_team_clean_key) in clean_key or
                                             utils.shorten_state(away_team_clean_key) in clean_key):
                                             game_odds = value
-                        games_today.append(Game(home_team, away_team, game_metrics, game_rules, game_odds))
+                        games_today.append(Game(self.league, self.date_of_games, home_team, away_team, game_metrics, game_rules, game_odds))
 
         return games_today
     
     def get_game_for_team(self, team_abbreviation):
         now_formatted = self.date_of_games.strftime("%Y-%m-%d")
-        schedule_key = self.league + "/schedules/" + team_abbreviation.lower() + ".pkl"
-        file_contents = s3_helper.read_s3_object(os.environ.get("AWS_BUCKET_NAME"), schedule_key)
-        team_schedule_df = pickle.loads(file_contents)
+        team_schedule_df = utils.get_schedule_from_s3(self.league, team_abbreviation)
         game = team_schedule_df.loc[team_schedule_df['datetime'] == now_formatted]
         return game
 
