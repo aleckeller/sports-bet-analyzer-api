@@ -28,29 +28,38 @@ def upload_rosters_to_s3():
                     file_name = os.environ.get("TEMP_PICKLE_PATH") + "%s.pkl" % team.abbreviation.lower()
                     s3_object_name = league + "/rosters/" + str(year_to_check) + "/" + "%s.pkl" % team.abbreviation.lower()
                     player_dataframes = []
-                    if team and team.roster and team.roster.players:
-                        s3_object = s3_helper.read_s3_object(os.environ.get("AWS_BUCKET_NAME"), s3_object_name)
-                        if year_to_check == now.year or not s3_object:
-                            for player in team.roster.players:
-                                # This try catch is currently needed due to an issue with the sportsreference api
-                                # getting the following error: AttributeError: 'NoneType' object has no attribute 'replace'
-                                # when getting a player dataframe for nhl
-                                try:
-                                    if player and player.dataframe is not None and not player.dataframe.empty:
-                                        if index_year in player.dataframe.index:
-                                            player_dataframe = player.dataframe.loc[index_year]
-                                            player_dataframe["name"] = player.name
-                                            player_dataframes.append(player_dataframe)
-                                        else:
-                                            print(index_year + " not in index")
-                                except:
-                                    print("Sportsreference error..")
-                            if len(player_dataframes) > 0:
-                                df = pd.concat(player_dataframes)
-                                df["team_name"] = team.name
-                                df.to_pickle(file_name)
-                                s3_helper.upload_file(file_name, os.environ.get("AWS_BUCKET_NAME"), s3_object_name)
-                                print("Finished working on " + team.name)
+                    for attempt in range(10):
+                        try:
+                            if team and team.roster and team.roster.players:
+                                s3_object = s3_helper.read_s3_object(os.environ.get("AWS_BUCKET_NAME"), s3_object_name)
+                                if year_to_check == now.year or not s3_object:
+                                    for player in team.roster.players:
+                                        # This try catch is currently needed due to an issue with the sportsreference api
+                                        # getting the following error: AttributeError: 'NoneType' object has no attribute 'replace'
+                                        # when getting a player dataframe for nhl
+                                        try:
+                                            if player and player.dataframe is not None and not player.dataframe.empty:
+                                                if index_year in player.dataframe.index:
+                                                    player_dataframe = player.dataframe.loc[index_year]
+                                                    player_dataframe["name"] = player.name
+                                                    player_dataframes.append(player_dataframe)
+                                                else:
+                                                    print(index_year + " not in index")
+                                        except:
+                                            print("Sportsreference error..")
+                                    if len(player_dataframes) > 0:
+                                        df = pd.concat(player_dataframes)
+                                        df["team_name"] = team.name
+                                        df.to_pickle(file_name)
+                                        s3_helper.upload_file(file_name, os.environ.get("AWS_BUCKET_NAME"), s3_object_name)
+                                        print("Finished working on " + team.name)
+                        except:
+                            print("Exception with sports reference on attempt " + str(attempt))
+                            continue
+                        else:
+                            break
+                    else:
+                        print("Connection to sports reference failed all attempts for " + team.abbreviation)
 
 def upload_schedules_to_s3():
     print("Uploading schedules to s3..")
