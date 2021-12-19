@@ -1,22 +1,27 @@
-from sportsreference.nba.teams import Teams as NBATeams
-from sportsreference.nba.schedule import Schedule as NBASchedule
-from sportsreference.nba.roster import Roster as NBARoster
-from sportsreference.nba.roster import Player as NBAPlayer
+from sportsbetanalyzer.sportsipy.nba.teams import Teams as NBATeams
+from sportsbetanalyzer.sportsipy.nba.schedule import Schedule as NBASchedule
+from sportsbetanalyzer.sportsipy.nba.roster import Roster as NBARoster
+from sportsbetanalyzer.sportsipy.nba.roster import Player as NBAPlayer
 
-from sportsreference.nhl.teams import Teams as NHLTeams
-from sportsreference.nhl.schedule import Schedule as NHLSchedule
-from sportsreference.nhl.roster import Roster as NHLRoster
-from sportsreference.nhl.roster import Player as NHLPlayer
+from sportsbetanalyzer.sportsipy.nhl.teams import Teams as NHLTeams
+from sportsbetanalyzer.sportsipy.nhl.schedule import Schedule as NHLSchedule
+from sportsbetanalyzer.sportsipy.nhl.roster import Roster as NHLRoster
+from sportsbetanalyzer.sportsipy.nhl.roster import Player as NHLPlayer
 
-from sportsreference.ncaab.teams import Teams as NCAABTeams
-from sportsreference.ncaab.schedule import Schedule as NCAABSchedule
-from sportsreference.ncaab.roster import Roster as NCAABRoster
-from sportsreference.ncaab.roster import Player as NCAABPlayer
+from sportsbetanalyzer.sportsipy.ncaab.teams import Teams as NCAABTeams
+from sportsbetanalyzer.sportsipy.ncaab.schedule import Schedule as NCAABSchedule
+from sportsbetanalyzer.sportsipy.ncaab.roster import Roster as NCAABRoster
+from sportsbetanalyzer.sportsipy.ncaab.roster import Player as NCAABPlayer
 
-from sportsreference.mlb.teams import Teams as MLBTeams
-from sportsreference.mlb.schedule import Schedule as MLBSchedule
-from sportsreference.mlb.roster import Roster as MLBRoster
-from sportsreference.mlb.roster import Player as MLBPlayer
+from sportsbetanalyzer.sportsipy.mlb.teams import Teams as MLBTeams
+from sportsbetanalyzer.sportsipy.mlb.schedule import Schedule as MLBSchedule
+from sportsbetanalyzer.sportsipy.mlb.roster import Roster as MLBRoster
+from sportsbetanalyzer.sportsipy.mlb.roster import Player as MLBPlayer
+
+from sportsbetanalyzer.sportsipy.nfl.teams import Teams as NFLTeams
+from sportsbetanalyzer.sportsipy.nfl.schedule import Schedule as NFLSchedule
+from sportsbetanalyzer.sportsipy.nfl.roster import Roster as NFLRoster
+from sportsbetanalyzer.sportsipy.nfl.roster import Player as NFLPlayer
 
 import sportsbetanalyzer.CONSTANTS as CONSTANTS
 
@@ -55,6 +60,15 @@ def get_map():
             CONSTANTS.ROSTER : NCAABRoster,
             CONSTANTS.PLAYER : NCAABPlayer,
             CONSTANTS.ODDS_API_SPORTS_KEY : "basketball_ncaab",
+            CONSTANTS.POINTS_SCORED : "points_scored",
+            CONSTANTS.POINTS_ALLOWED : "points_allowed"
+        },
+        CONSTANTS.NFL : {
+            CONSTANTS.TEAMS : NFLTeams,
+            CONSTANTS.SCHEDULE : NFLSchedule,
+            CONSTANTS.ROSTER : NFLRoster,
+            CONSTANTS.PLAYER : NFLPlayer,
+            CONSTANTS.ODDS_API_SPORTS_KEY : "americanfootball_nfl",
             CONSTANTS.POINTS_SCORED : "points_scored",
             CONSTANTS.POINTS_ALLOWED : "points_allowed"
         }
